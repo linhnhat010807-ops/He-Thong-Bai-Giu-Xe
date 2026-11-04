@@ -3,13 +3,12 @@
 #include <string>
 using namespace std;
 
-// Đổi số hàng sang chữ cái: 1 -> 'A', 2 -> 'B', ...
 static char rowToLetter(int row) {
     return static_cast<char>('A' + row - 1);
 }
 
-void displayParkingStatus(ParkingNode* head) {
-    if (head == nullptr) {
+void displayParkingStatus(const ParkingList& list) {
+    if (list.head == nullptr) {
         cout << "Bai xe chua duoc khoi tao!\n";
         return;
     }
@@ -17,23 +16,21 @@ void displayParkingStatus(ParkingNode* head) {
     int emptyCount = 0;
     int totalCount = 0;
     string emptyList = "";
-    int currentRow = -1;   // -1 = chưa in hàng nào
+    int currentRow = -1;
 
     cout << "===== SO DO BAI GIU XE =====\n";
     cout << "[ ] = trong    [X] = co xe\n\n";
 
-    for (ParkingNode* cur = head; cur != nullptr; cur = cur->next) {
-        const ParkingSlot& s = cur->data;
-
-        if (s.row != currentRow) {            // gặp hàng mới
+    for (ParkingSlot* cur = list.head; cur != nullptr; cur = cur->next) {
+        if (cur->row != currentRow) {
             if (currentRow != -1) cout << "\n";
-            currentRow = s.row;
-            cout << "Hang " << rowToLetter(s.row) << ": ";
+            currentRow = cur->row;
+            cout << "Hang " << rowToLetter(cur->row) << ": ";
         }
 
-        string name = string(1, rowToLetter(s.row)) + to_string(s.position);
+        string name = string(1, rowToLetter(cur->row)) + to_string(cur->position);
         cout << name;
-        if (s.occupied) {
+        if (cur->isOccupied) {
             cout << "[X] ";
         } else {
             cout << "[ ] ";

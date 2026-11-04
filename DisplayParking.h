@@ -1,15 +1,8 @@
 #ifndef DISPLAYPARKING_H
 #define DISPLAYPARKING_H
 
-#include "ParkingSlot.h"
+#include "ParkingList.h"
 
-
-struct ParkingNode {
-    ParkingSlot data;
-    ParkingNode* next;
-};
-// ================================================================
-
-void displayParkingStatus(ParkingNode* head);
+void displayParkingStatus(const ParkingList& list);
 
 #endif
