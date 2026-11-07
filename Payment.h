@@ -2,7 +2,7 @@
 #define PAYMENT_H
 
 #include "HashTable.h"
-#include "LinkedList.h"
+#include "ParkingList.h"
 
 class Payment {
 public:
