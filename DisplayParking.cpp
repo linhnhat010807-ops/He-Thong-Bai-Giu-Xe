@@ -8,13 +8,12 @@ static char rowToLetter(int row) {
 }
 
 void displayParkingStatus(const ParkingList& list) {
-    if (list.head == nullptr) {
+    if (list.head == nullptr || list.capacity <= 0) {
         cout << "Bai xe chua duoc khoi tao!\n";
         return;
     }
 
     int emptyCount = 0;
-    int totalCount = 0;
     string emptyList = "";
     int currentRow = -1;
 
@@ -37,11 +36,14 @@ void displayParkingStatus(const ParkingList& list) {
             emptyCount++;
             emptyList += name + " ";
         }
-        totalCount++;
     }
 
     cout << "\n\n";
-    cout << "Danh sach cho trong: "
-         << (emptyCount > 0 ? emptyList : "(khong con cho trong)") << "\n";
-    cout << "Tong so cho trong: " << emptyCount << "/" << totalCount << "\n";
+    if (emptyCount == 0) {
+        cout << "Bai xe da day, khong con cho trong!\n";
+    } else {
+        cout << "Danh sach cho trong: " << emptyList << "\n";
+    }
+    cout << "Tong so cho trong: " << emptyCount << "\n";
+    cout << "Tong suc chua: " << list.capacity << "\n";
 }
