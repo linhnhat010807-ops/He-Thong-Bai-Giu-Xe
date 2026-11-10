@@ -4,6 +4,6 @@
 #include "ParkingList.h"
 #include "HashTable.h"
 
-bool sendVehicle(ParkingSlot* head, HashTable& hashTable);
+bool sendVehicle(ParkingList& parkingList, HashTable& hashTable);
 
 #endif
