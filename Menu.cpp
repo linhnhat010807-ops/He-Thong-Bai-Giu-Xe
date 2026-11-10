@@ -19,7 +19,6 @@ void showMenu() {
     cout << "3. Tim kiem xe theo bien so\n";
     cout << "4. Xem danh sach cho trong\n";
     cout << "0. Thoat chuong trinh\n";
-    cout << "Nhap lua chon: ";
 }
 
 int getValidNumber(const string& message, int minValue, int maxValue) {
