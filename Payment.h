@@ -6,7 +6,9 @@
 
 class Payment {
 public:
-    double calculateParkingFee(time_t entryTime, time_t exitTime);
+    double calculateParkingFee(
+        std::time_t entryTime, 
+        std::time_t exitTime);
 
     bool returnVehicle(HashTable& hashTable,
                        LinkedList& parkingList);
