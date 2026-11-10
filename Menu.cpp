@@ -1,10 +1,11 @@
-//menu nháp
 
 #include <iostream>
 #include <limits>
 #include <string>
-
+#include <ctime>
 #include "Menu.h"
+#include "ParkingList.h"
+#include "HashTable.h"
 #include "SendVehicle.h"
 #include "Payment.h"
 #include "DisplayParking.h"
@@ -12,90 +13,134 @@
 using namespace std;
 
 void showMenu() {
-    cout << "          QUAN LY BAI GIU XE            \n";
-    cout << "  1. Gui xe                             \n";
-    cout << "  2. Tra xe va thanh toan               \n";
-    cout << "  3. Tim kiem thong tin xe              \n";
-    cout << "  4. Xem so do va tinh trang bai xe     \n";
-    cout << "  5. Thong ke bai xe                    \n";
-    cout << "  0. Thoat chuong trinh                 \n";
+    cout << "\nHE THONG BAI GIU XE\n";
+    cout << "1. Gui xe\n";
+    cout << "2. Tra xe va thanh toan\n";
+    cout << "3. Tim kiem xe theo bien so\n";
+    cout << "4. Xem danh sach cho trong\n";
+    cout << "0. Thoat chuong trinh\n";
     cout << "Nhap lua chon: ";
 }
 
-int getValidChoice() {
-    int choice;
+int getValidNumber(const string& message, int minValue, int maxValue) {
+    int number;
 
     while (true) {
-        if (cin >> choice) {
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << message;
 
-            if (choice >= 0 && choice <= 5) {
-                return choice;
+        if (cin >> number) {
+            if (number >= minValue && number <= maxValue) {
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                return number;
             }
 
-            cout << "Lua chon khong hop le! Nhap lai: ";
+            cout << "Gia tri phai tu " << minValue
+                 << " den " << maxValue << "!\n";
         }
         else {
             if (cin.eof()) {
-                return 0;
+                return -1;
             }
-
-            cout << "Vui long nhap so nguyen! Nhap lai: ";
 
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Vui long nhap so nguyen hop le!\n";
         }
     }
 }
 
-void handleMenuChoice(int choice) {
+int getValidChoice() {
+    return getValidNumber("Nhap lua chon: ", 0, 4);
+}
 
-    switch (choice) {
+void searchVehicleMenu(const HashTable& hashTable) {
+    string plate;
 
-        case 1:
-            cout << "\n CHUC NANG GUI XE \n";
-            sendVehicle();
-            break;
+    cout << "\nNhap bien so xe can tim: ";
+    getline(cin >> ws, plate);
 
-        case 2:
-            cout << "\n CHUC NANG TRA XE \n";
-            returnVehicle();
-            break;
+    if (plate.empty()) {
+        cout << "Bien so khong duoc de trong!\n";
+        return;
+    }
 
-        case 3:
-            cout << "\n TIM KIEM THONG TIN XE\n";
+    ParkingSlot* slot = searchVehicle(hashTable, plate);
 
-            cout << "Chuc nang dang duoc tich hop.\n";
-            break;
+    if (slot == nullptr || !slot->isOccupied) {
+        cout << "Khong tim thay xe trong bai!\n";
+        return;
+    }
 
-        case 4:
-            cout << "\n TINH TRANG BAI XE\n";
-            displayParkingStatus();
-            break;
+    cout << "\nTHONG TIN XE\n";
+    cout << "Bien so: " << slot->licensePlate << endl;
+    cout << "Hang: " << static_cast<char>('A' + slot->row - 1) << endl;
+    cout << "Vi tri: " << slot->position << endl;
 
-        case 5:
-            cout << "\n THONG KE BAI XE\n";
-
-            cout << "Chuc nang thong ke can duoc bo sung.\n";
-            break;
-
-        case 0:
-            cout << "\nCam on ban da su dung dich vu!\n";
-            cout << "Da thoat chuong trinh!\n";
-            break;
+    cout << "Thoi gian gui: ";
+    if (slot->entryTime > 0) {
+        cout << ctime(&slot->entryTime);
+    }
+    else {
+        cout << "Khong co du lieu\n";
     }
 }
 
 void runProgram() {
+    cout << "KHOI TAO BAI GIU XE\n";
+
+    int rows = getValidNumber("Nhap so hang (1-26): ", 1, 26);
+    if (rows == -1) return;
+
+    int slotsPerRow = getValidNumber("Nhap so vi tri moi hang: ", 1, 1000);
+    if (slotsPerRow == -1) return;
+
+    ParkingList parkingList;
+    initParkingList(parkingList, rows, slotsPerRow);
+
+    HashTable hashTable;
+    CreateHT(hashTable);
+    
+    Payment payment;
+
+    cout << "\nKhoi tao bai xe thanh cong!\n";
+    cout << "Tong suc chua: " << parkingList.capacity << " cho.\n";
 
     int choice;
 
     do {
         showMenu();
-
         choice = getValidChoice();
 
-        handleMenuChoice(choice);
+        switch (choice) {
+        case -1:
+            cout << "\nKet thuc nhap du lieu.\n";
+            break;
 
-    } while (choice != 0);
+        case 1:
+            sendVehicle(parkingList, hashTable);
+            break;
+
+        case 2:
+            payment.returnVehicle(hashTable, parkingList);
+            break;
+
+        case 3:
+            searchVehicleMenu(hashTable);
+            break;
+
+        case 4:
+            displayParkingStatus(parkingList);
+            break;
+
+        case 0:
+            cout << "\nDang thoat chuong trinh...\n";
+            break;
+        }
+
+    } while (choice != 0 && choice != -1);
+
+    destroyHT(hashTable);
+    destroyParkingList(parkingList);
+
+    cout << "Da dong chuong trinh!\n";
 }
