@@ -46,14 +46,14 @@ double Payment::calculateParkingFee(
 
 bool Payment::returnVehicle(
     HashTable& hashTable,
-    LinkedList& parkingList
+    ParkingList& parkingList
 ) {
     string plate;
 
     cout << "\nNhap bien so xe can tra: ";
     cin >> plate;
 
-    HashNode* node = hashTable.find(plate);
+    HashNode* node = searchVehicle(plate);
 
     if (node == nullptr) {
         cout << "\nKhong tim thay xe!\n";
@@ -69,7 +69,7 @@ bool Payment::returnVehicle(
         exitTime
     );
 
-    cout << "\n========== HOA DON GUI XE ==========\n";
+    cout << "\nHOA DON GUI XE\n";
 
     cout << "Bien so xe: " << plate << endl;
 
@@ -87,7 +87,7 @@ bool Payment::returnVehicle(
          << fee << " VND\n";
 
 
-    hashTable.remove(plate);
+    removeVehicle(plate);
 
 
     parkingList.releaseSpot(spot);
