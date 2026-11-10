@@ -60,7 +60,7 @@ bool Payment::returnVehicle(
         return false;
     }
 
-    ParkingSpot* spot = node->spot;
+    ParkingSlot* spot = node->spot;
 
     time_t exitTime = time(nullptr);
 
@@ -86,11 +86,9 @@ bool Payment::returnVehicle(
          << fixed << setprecision(0)
          << fee << " VND\n";
 
-
     removeVehicle(plate);
-
-
-    parkingList.releaseSpot(spot);
+    
+    releaseSpot(spot);
 
     cout << "\nTra xe thanh cong!\n";
     cout << "Vi tri da duoc cap nhat thanh trong.\n";
