@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <algorithm>
+#include <ctime>
 
 using namespace std;
 
@@ -28,7 +30,6 @@ double Payment::calculateParkingFee(
             price = 5000;
         }
 
-        // Tinh thoi gian cua gio dang xet
         double remaining = difftime(exitTime, current);
 
         double usedSeconds = min(remaining, 3600.0);
@@ -43,7 +44,6 @@ double Payment::calculateParkingFee(
     return totalFee;
 }
 
-
 bool Payment::returnVehicle(
     HashTable& hashTable,
     ParkingList& parkingList
@@ -53,19 +53,17 @@ bool Payment::returnVehicle(
     cout << "\nNhap bien so xe can tra: ";
     cin >> plate;
 
-    HashNode* node = searchVehicle(plate);
-
-    if (node == nullptr) {
+    ParkingSlot* slot = searchVehicle(hashTable, plate);
+    
+    if (slot == nullptr) {
         cout << "\nKhong tim thay xe!\n";
         return false;
     }
 
-    ParkingSlot* spot = node->spot;
-
     time_t exitTime = time(nullptr);
 
     double fee = calculateParkingFee(
-        spot->entryTime,
+        slot->entryTime,
         exitTime
     );
 
@@ -73,11 +71,11 @@ bool Payment::returnVehicle(
 
     cout << "Bien so xe: " << plate << endl;
 
-    cout << "Vi tri: Hang " << spot->row
-         << " - So " << spot->position << endl;
+    cout << "Vi tri: Hang " << slot->row
+         << " - So " << slot->position << endl;
 
     cout << "Thoi gian vao: "
-         << ctime(&spot->entryTime);
+         << ctime(&slot->entryTime);
 
     cout << "Thoi gian ra: "
          << ctime(&exitTime);
@@ -86,9 +84,9 @@ bool Payment::returnVehicle(
          << fixed << setprecision(0)
          << fee << " VND\n";
 
-    removeVehicle(plate);
+    removeVehicle(hashTable, plate);
     
-    releaseSpot(spot);
+    releaseSlot(slot);
 
     cout << "\nTra xe thanh cong!\n";
     cout << "Vi tri da duoc cap nhat thanh trong.\n";
