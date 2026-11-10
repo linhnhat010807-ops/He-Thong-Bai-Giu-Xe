@@ -4,7 +4,7 @@
 #include <ctime>
 using namespace std;
 
-bool sendVehicle(ParkingSlot* head, HashTable& hashTable) {
+bool sendVehicle(ParkingList& parkingList, HashTable& hashTable) {
     string plate;
 
     cout << "Nhap bien so xe: ";
