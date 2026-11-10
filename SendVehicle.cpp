@@ -10,12 +10,12 @@ bool sendVehicle(ParkingList& parkingList, HashTable& hashTable) {
     cout << "Nhap bien so xe: ";
     getline(cin >> ws, plate);
 
-    if (hashTable.searchVehicle(plate)) {
+    if (searchVehicle(hashTable, plate)) {
         cout << "Xe da ton tai!\n";
         return false;
     }
 
-    ParkingSlot* slot = findEmptySlot(head);
+    ParkingSlot* slot = findEmptySlot(parkingList);
 
     if (slot == nullptr) {
         cout << "Bai xe da day!\n";
@@ -24,9 +24,9 @@ bool sendVehicle(ParkingList& parkingList, HashTable& hashTable) {
 
     slot->isOccupied = true;
     slot->licensePlate = plate;
-    slot->checkInTime = time(nullptr);
+    slot->entryTime = time(nullptr);
 
-    hashTable.insertVehicle(plate, slot);
+    insertVehicle(hashTable, plate, slot);
 
     cout << "Gui xe thanh cong!\n";
     cout << "Hang: " << slot->row
