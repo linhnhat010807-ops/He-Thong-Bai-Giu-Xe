@@ -11,7 +11,7 @@ public:
         std::time_t exitTime);
 
     bool returnVehicle(HashTable& hashTable,
-                       LinkedList& parkingList);
+                       ParkingList& parkingList);
 };
 
 #endif
