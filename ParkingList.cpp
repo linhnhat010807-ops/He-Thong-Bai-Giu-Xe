@@ -2,11 +2,19 @@
 
 void initParkingList(ParkingList& list, int rows, int slotsPerRow) {
     list.head = nullptr;
+
+    if (rows <= 0 || slotsPerRow <= 0) {
+        list.rows = 0;
+        list.slotsPerRow = 0;
+        list.capacity = 0;
+        return;
+    }
+
     list.rows = rows;
     list.slotsPerRow = slotsPerRow;
     list.capacity = rows * slotsPerRow;
 
-    ParkingSlot* tail = nullptr;      // Node cuối hiện tại, để nối node mới vào
+    ParkingSlot* tail = nullptr; // Node cuối hiện tại, để nối node mới vào
 
     for (int r = 1; r <= rows; r++) {
         for (int p = 1; p <= slotsPerRow; p++) {
@@ -20,31 +28,30 @@ void initParkingList(ParkingList& list, int rows, int slotsPerRow) {
             node->next = nullptr;
 
             if (list.head == nullptr) {
-                list.head = node;          // Node đầu tiên
+                list.head = node; // Node đầu tiên
             } else {
-                tail->next = node;      // Nối vào cuối danh sách
+                tail->next = node;  // Nối vào cuối danh sách
             }
             tail = node;
         }
     }
 }
 
-
 ParkingSlot* findEmptySlot(const ParkingList& list) {
     ParkingSlot* current = list.head;
 
     while (current != nullptr) {
         if (!current->isOccupied) {
-            return current;               // Gặp chỗ trống đầu tiên
+            return current;        // Gặp chỗ trống đầu tiên
         }
         current = current->next;
     }
-    return nullptr;       // Bãi đầy
+    return nullptr;    // Bãi đầy
 }
 
 void releaseSlot(ParkingSlot* slot) {
     if (slot == nullptr) {
-        return;                      
+        return;    // Tránh lỗi khi con trỏ rỗng
     }
     slot->isOccupied = false;
     slot->licensePlate = "";
@@ -60,7 +67,7 @@ void destroyParkingList(ParkingList& list) {
         delete temp;
     }
     list.head = nullptr;      // Đưa head về nullptr
-    list.rows = 0;          // Reset thông tin bãi xe
+    list.rows = 0;      // Reset thông tin bãi xe
     list.slotsPerRow = 0;
     list.capacity = 0;
 }
