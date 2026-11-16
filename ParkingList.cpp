@@ -1,12 +1,13 @@
 #include "ParkingList.h"
 
 void initParkingList(ParkingList& list, int rows, int slotsPerRow) {
+    
     list.head = nullptr;
+    list.rows = 0;
+    list.slotsPerRow = 0;
+    list.capacity = 0;
 
     if (rows <= 0 || slotsPerRow <= 0) {
-        list.rows = 0;
-        list.slotsPerRow = 0;
-        list.capacity = 0;
         return;
     }
 
@@ -14,23 +15,23 @@ void initParkingList(ParkingList& list, int rows, int slotsPerRow) {
     list.slotsPerRow = slotsPerRow;
     list.capacity = rows * slotsPerRow;
 
-    ParkingSlot* tail = nullptr; // Node cuối hiện tại, để nối node mới vào
+    ParkingSlot* tail = nullptr;
 
-    for (int r = 1; r <= rows; r++) {
-        for (int p = 1; p <= slotsPerRow; p++) {
-            ParkingSlot* node = new ParkingSlot;
+    for (int r = 1; r <= rows; ++r) {
+        for (int p = 1; p <= slotsPerRow; ++p) {
+            ParkingSlot* node = new ParkingSlot{};
             node->slotNumber = (r - 1) * slotsPerRow + p;
             node->row = r;
             node->position = p;
             node->isOccupied = false;
-            node->licensePlate = "";
+            node->licensePlate.clear();
             node->entryTime = 0;
             node->next = nullptr;
 
             if (list.head == nullptr) {
-                list.head = node; // Node đầu tiên
+                list.head = node;
             } else {
-                tail->next = node;  // Nối vào cuối danh sách
+                tail->next = node;
             }
             tail = node;
         }
@@ -42,19 +43,20 @@ ParkingSlot* findEmptySlot(const ParkingList& list) {
 
     while (current != nullptr) {
         if (!current->isOccupied) {
-            return current;        // Gặp chỗ trống đầu tiên
+            return current;
         }
         current = current->next;
     }
-    return nullptr;    // Bãi đầy
+    return nullptr;
 }
 
 void releaseSlot(ParkingSlot* slot) {
     if (slot == nullptr) {
-        return;    // Tránh lỗi khi con trỏ rỗng
+        return;
     }
+
     slot->isOccupied = false;
-    slot->licensePlate = "";
+    slot->licensePlate.clear();
     slot->entryTime = 0;
 }
 
@@ -66,8 +68,9 @@ void destroyParkingList(ParkingList& list) {
         current = current->next;
         delete temp;
     }
-    list.head = nullptr;      // Đưa head về nullptr
-    list.rows = 0;      // Reset thông tin bãi xe
+
+    list.head = nullptr;
+    list.rows = 0;
     list.slotsPerRow = 0;
     list.capacity = 0;
 }
