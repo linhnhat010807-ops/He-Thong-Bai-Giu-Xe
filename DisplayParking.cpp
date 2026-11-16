@@ -17,7 +17,7 @@ void displayParkingStatus(const ParkingList& list) {
     string emptyList = "";
     int currentRow = -1;
 
-    cout << "===== SO DO BAI GIU XE =====\n";
+    cout << "SO DO BAI GIU XE\n";
     cout << "[ ] = trong    [X] = co xe\n\n";
 
     for (ParkingSlot* cur = list.head; cur != nullptr; cur = cur->next) {
