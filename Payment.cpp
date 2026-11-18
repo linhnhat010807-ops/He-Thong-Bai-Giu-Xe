@@ -54,7 +54,7 @@ bool Payment::returnVehicle(HashTable& hashTable, ParkingList& parkingList) {
 
     string plate;
     cout << "\nNhap bien so xe can tra: ";
-    cin >> plate;
+    getline(cin >> ws, plate);
 
     ParkingSlot* slot = searchVehicle(hashTable, plate);
     if (slot == nullptr) {
@@ -70,7 +70,7 @@ bool Payment::returnVehicle(HashTable& hashTable, ParkingList& parkingList) {
         return false;
     }
 
-    if (exitTime <= slot->entryTime) {
+    if (exitTime < slot->entryTime) {
         cout << "\nLoi: Thoi gian tra xe phai sau thoi gian vao bai.\n";
         cout << "Xe van duoc giu trong bai.\n";
         return false;
