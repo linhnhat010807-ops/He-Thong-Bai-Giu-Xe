@@ -44,7 +44,7 @@ Chạy dữ liệu kiểm thử bổ sung (A2–A4 và B5):
 | `fee_test.cpp` | Nhóm F1–F10: tính phí |
 | `bench.cpp` | Đo hiệu năng; có cấu hình bãi 26 × 1000 (26.000 chỗ), phục vụ kiểm tra G1 và mục 5.3 |
 
-## Chạy toàn bộ bộ kiểm thử
+## Chạy toàn bộ kiểm thử
 
 Mở PowerShell tại thư mục dự án và chạy:
 
