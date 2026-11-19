@@ -3,3 +3,9 @@
 result_*.txt
 *.log
 .vscode/
+# Linux/macOS: file chạy được không có đuôi
+/parking
+/test_all
+/fee_test
+/bench
+g1_input.tmp
